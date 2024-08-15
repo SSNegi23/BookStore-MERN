@@ -16,22 +16,25 @@ app.get("/", (req, res) => {
 // Route for Saving a new Book
 app.post('/books', async (req, res) => {
   try {
-    if (
-      !req.body.title ||
-      !req.body.author ||
-      !req.body.publishYear
-    ) {
+    const { title, author, publishYear } = req.body;
+
+    // Check if all required fields are provided
+    if (!title || !author || !publishYear) {
       return res.status(400).send({
         message: 'Send all required fields: title, author, publishYear',
       });
     }
 
-    const newBook = {
-      title: req.body.title,
-      author: req.body.author,
-      publishYear: req.body.publishYear,
-    };
+    // Check for duplicates
+    const existingBook = await Book.findOne({ title, author, publishYear });
+    if (existingBook) {
+      return res.status(409).send({
+        message: 'This book already exists',
+      });
+    }
 
+    // Create the new book
+    const newBook = { title, author, publishYear };
     const book = await Book.create(newBook);
 
     return res.status(201).send(book);
@@ -68,6 +71,33 @@ app.get('/books/:id', async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 });
+
+// Route to update a book
+app.put('/books/:id', async (req, res) => {
+  try {
+    if (
+      !req.body.title ||
+      !req.body.author ||
+      !req.body.publishYear
+    ) {
+      return res.status(400).send({
+        message: 'Send all required fields: title, author, publishYear',
+      });
+    }
+
+    const { id } = req.params;
+    const result = await Book.findByIdAndUpdate(id, req.body);
+
+    if (!result) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+
+    return res.status(200).send({ message: 'Book updated Successfully' });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send({ message: err.message });
+  }
+})
 
 mongoose.connect(mongoDBURL).then(() => {
   console.log('App connected to database');

@@ -3,8 +3,10 @@ import { PORT, mongoDBURL } from './config.js';
 import mongoose from 'mongoose';
 import booksRoute from './routes/booksRoute.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 const app = express();
+dotenv.config();
 
 // Middleware for parsing request body
 app.use(express.json());

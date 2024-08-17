@@ -1,5 +1,4 @@
 import express from 'express';
-import { PORT, mongoDBURL } from './config.js';
 import mongoose from 'mongoose';
 import booksRoute from './routes/booksRoute.js';
 import cors from 'cors';
@@ -10,11 +9,9 @@ dotenv.config();
 
 // Middleware for parsing request body
 app.use(express.json());
+const PORT = process.env.PORT || 4000;
+const MONGODB_URL = process.env.MONGODB_URL;
 
-// Middleware for handling CORS(Cross Origin Resource Sharing) Policy
-// Option 1: Allow All Origins with Default of cors(*)
-// app.use(cors());
-// Option 2: Allow Custom Origins (better option)
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -30,9 +27,9 @@ app.get("/", (req, res) => {
 
 app.use('/books', booksRoute);
 
-mongoose.connect(mongoDBURL).then(() => {
+mongoose.connect(MONGODB_URL).then(() => {
   console.log('App connected to database');
-  app.listen(PORT, () => {
+  app.listen(PORT , () => {
     console.log(`App is listening to port: ${PORT}`);
   });
 }).catch((err) => {

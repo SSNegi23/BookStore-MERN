@@ -14,7 +14,7 @@ const MONGODB_URL = process.env.MONGODB_URL;
 
 app.use(
   cors({
-    origin: 'https://bookstore-mern-frontend-seyt.onrender.com/',
+    origin: 'https://bookstore-mern-frontend-seyt.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
   })

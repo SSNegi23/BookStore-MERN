@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 import { MdOutlineAddBox } from "react-icons/md";
 import BooksTable from "../components/home/BooksTable";
 import BooksCard from "../components/home/BooksCard";
+import SearchBar from "../components/SearchBar";
 
 const Home = () => {
   const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showType, setShowType] = useState("table");
 
@@ -18,6 +20,7 @@ const Home = () => {
       // .get("https://bookstore-mern-backend-6g30.onrender.com/books")
       .then((res) => {
         setBooks(res.data.data);
+        setFilteredBooks(res.data.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -25,8 +28,27 @@ const Home = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleSearch = ({ title, author, publishYear }) => {
+    const filtered = books.filter((book) => {
+      return (
+        (!title || book.title.toLowerCase().includes(title.toLowerCase())) &&
+        (!author || book.author?.toLowerCase().includes(author.toLowerCase())) &&
+        (!publishYear || book.publishYear?.toString().includes(publishYear))
+      );
+    });
+    setFilteredBooks(filtered);
+  };
+
+  const handleClearSearch = () => {
+    setFilteredBooks(books);
+  };
+
   return (
     <div className="p-4">
+      {/* Search Bar */}
+      <SearchBar onSearch={handleSearch} onClear={handleClearSearch} />
+
       <div className="flex justify-center items-center gap-x-4">
         <button
           className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg"
@@ -41,6 +63,7 @@ const Home = () => {
           Card
         </button>
       </div>
+
       <div className="flex justify-between items-center">
         <h1 className="text-3xl my-8">Books List</h1>
         <Link to={"/books/create"}>
@@ -51,9 +74,9 @@ const Home = () => {
       {loading ? (
         <Spinner />
       ) : showType === "table" ? (
-        <BooksTable books={books} />
+        <BooksTable books={filteredBooks} />
       ) : (
-        <BooksCard books={books} />
+        <BooksCard books={filteredBooks} />
       )}
     </div>
   );

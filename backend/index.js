@@ -30,10 +30,12 @@ app.use(
 
 app.get("/", (req, res) => {
   console.log(req);
-  return res.status(234).send('Welcome to MERN Stack Tutorial');
+  return res.status(200).send('Welcome to MERN Stack Tutorial');
 });
 
 app.use('/books', booksRoute);
+
+// app.use("/login", log)
 
 mongoose.connect(MONGODB_URL).then(() => {
   console.log('App connected to database');

@@ -13,6 +13,7 @@ const EditBook = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -25,10 +26,12 @@ const EditBook = () => {
       })
       .catch((err) => {
         setLoading(false);
-        alert("An error happened. Please Check console");
+        // alert("An error happened. Please Check console");
+        enqueueSnackbar("Book doesn't exists", { variant: "error" });
         console.log(err);
       });
   }, [id]);
+
   const handleEditBook = () => {
     const data = {
       title,
@@ -50,11 +53,12 @@ const EditBook = () => {
         console.log(err);
       });
   };
+
   return (
     <div className="p-4">
       <BackButton />
       <h1 className="text-3xl my-4">Edit Book</h1>
-      {loading ? <Spinner /> : ""}
+      {loading && <Spinner />}
       <div className="flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto">
         <div className="my-4">
           <label className="text-xl mr-4 text-gray-500">Title</label>
@@ -63,6 +67,7 @@ const EditBook = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="border-2 border-gray-500 px-4 py-2 w-full"
+            required
           />
         </div>
         <div className="my-4">
@@ -72,6 +77,7 @@ const EditBook = () => {
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
             className="border-2 border-gray-500 px-4 py-2  w-full "
+            required
           />
         </div>
         <div className="my-4">
@@ -81,6 +87,7 @@ const EditBook = () => {
             value={publishYear}
             onChange={(e) => setPublishYear(e.target.value)}
             className="border-2 border-gray-500 px-4 py-2  w-full "
+            required
           />
         </div>
         <button className="p-2 bg-sky-300 m-8" onClick={handleEditBook}>

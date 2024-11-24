@@ -49,6 +49,7 @@ const CreateBooks = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value.trimStart())}   // Trim leading spaces
             className="border-2 border-gray-500 px-4 py-2 w-full"
+            required
           />
         </div>
         <div className="my-4">
@@ -58,6 +59,7 @@ const CreateBooks = () => {
             value={author}
             onChange={(e) => setAuthor(e.target.value.trimStart())}    // Trim leading spaces
             className="border-2 border-gray-500 px-4 py-2  w-full "
+            required
           />
         </div>
         <div className="my-4">
@@ -67,6 +69,7 @@ const CreateBooks = () => {
             value={publishYear}
             onChange={(e) => setPublishYear(e.target.value)}
             className="border-2 border-gray-500 px-4 py-2  w-full "
+            required
           />
         </div>
         <button className="p-2 bg-sky-300 m-8" onClick={handleSaveBook}>

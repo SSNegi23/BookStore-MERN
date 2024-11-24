@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const bookSchema = mongoose.Schema(
+const bookModel = mongoose.Schema(
   {
     title: {
       type: String,
@@ -21,6 +21,6 @@ const bookSchema = mongoose.Schema(
 );
 
 // Add a compound unique index
-bookSchema.index({ title: 1, author: 1, publishYear: 1 }, { unique: true });
+bookModel.index({ title: 1, author: 1, publishYear: 1 }, { unique: true });
 
-export const Book = mongoose.model('Book', bookSchema);
+export const Book = mongoose.model('Book', bookModel);

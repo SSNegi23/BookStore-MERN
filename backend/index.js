@@ -14,7 +14,7 @@ const MONGODB_URL = process.env.MONGODB_URL;
 
 app.use(
   cors({
-    origin: 'http://localhost:5174',   //! update origin according to fontend link
+    origin: 'http://localhost:5173',   //! update origin according to fontend link
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
   })

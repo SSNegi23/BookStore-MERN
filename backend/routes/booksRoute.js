@@ -1,5 +1,4 @@
 import express from 'express';
-import { Book } from '../models/bookModel.js';
 import { deleteBook, getBookByID, getBooks, saveBook, updateBook } from '../controllers/booksController.js';
 
 const router = express.Router();

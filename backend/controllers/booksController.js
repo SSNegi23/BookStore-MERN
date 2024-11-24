@@ -51,7 +51,6 @@ export const getBookByID = async (req, res) => {
   try {
     const { id } = req.params;
     const book = await Book.findById(id);
-
     return res.status(200).json(book);
   } catch (err) {
     console.log(err.message);

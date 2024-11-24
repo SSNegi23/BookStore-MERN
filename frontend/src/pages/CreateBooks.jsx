@@ -15,8 +15,8 @@ const CreateBooks = () => {
 
   const handleSaveBook = () => {
     const data = {
-      title,
-      author,
+      title: title.trim(),
+      author: author.trim(),
       publishYear,
     };
     setLoading(true);
@@ -29,8 +29,10 @@ const CreateBooks = () => {
       })
       .catch((err) => {
         setLoading(false);
-        // alert("An error happened. Please Check Console");
-        enqueueSnackbar("Error", { variant: "error" });
+        if(err.response.status === 409) {
+          return enqueueSnackbar(err.response.data.message, { variant: "warning" });
+        }
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
         console.log(err);
       });
   };
@@ -45,7 +47,7 @@ const CreateBooks = () => {
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value.trimStart())}   // Trim leading spaces
             className="border-2 border-gray-500 px-4 py-2 w-full"
           />
         </div>
@@ -54,7 +56,7 @@ const CreateBooks = () => {
           <input
             type="text"
             value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            onChange={(e) => setAuthor(e.target.value.trimStart())}    // Trim leading spaces
             className="border-2 border-gray-500 px-4 py-2  w-full "
           />
         </div>

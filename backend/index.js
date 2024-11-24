@@ -12,7 +12,13 @@ app.use(express.json());
 const PORT = process.env.PORT || 4000;
 const MONGODB_URL = process.env.MONGODB_URL;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5174',   //! update origin according to fontend link
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type'],
+  })
+);
 
 // app.use(
 //   cors({
@@ -31,7 +37,7 @@ app.use('/books', booksRoute);
 
 mongoose.connect(MONGODB_URL).then(() => {
   console.log('App connected to database');
-  app.listen(PORT , () => {
+  app.listen(PORT, () => {
     console.log(`App is listening to port: ${PORT}`);
   });
 }).catch((err) => {

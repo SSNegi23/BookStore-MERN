@@ -1,53 +1,14 @@
 import express from 'express';
 import { Book } from '../models/bookModel.js';
+import { getBooks, saveBook } from '../controllers/booksController.js';
 
 const router = express.Router();
 
 // Route for Saving a new Book
-router.post('/', async (req, res) => {
-  try {
-    const { title, author, publishYear } = req.body;
-
-    // Check if all required fields are provided
-    if (!title || !author || !publishYear) {
-      return res.status(400).send({
-        message: 'Send all required fields: title, author, publishYear',
-      });
-    }
-
-    // Check for duplicates
-    const existingBook = await Book.findOne({ title, author, publishYear });
-    if (existingBook) {
-      return res.status(409).send({
-        message: 'This book already exists',
-      });
-    }
-
-    // Create the new book
-    const newBook = { title, author, publishYear };
-    const book = await Book.create(newBook);
-
-    return res.status(201).send(book);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send({ message: err.message });
-  }
-});
+router.post('/', saveBook);
 
 // Route to Get All Books from Database
-router.get('/', async (req, res) => {
-  try {
-    const books = await Book.find({});
-
-    return res.status(200).json({
-      count: books.length,
-      data: books
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send({ message: err.message });
-  }
-});
+router.get('/', getBooks);
 
 // Route to Get All Books from Database by id
 router.get('/:id', async (req, res) => {

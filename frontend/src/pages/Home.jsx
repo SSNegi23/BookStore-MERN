@@ -11,13 +11,21 @@ const Home = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showType, setShowType] = useState("table");
+
+  // Retrieve `showType` from localStorage or default to "table"
+  const [showType, setShowType] = useState(
+    () => localStorage.getItem("showType") || "table"
+  );
+
+  // Store `showType` in localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("showType", showType);
+  }, [showType]);
 
   useEffect(() => {
     setLoading(true);
     axios
       .get("http://localhost:4000/books")
-      // .get("https://bookstore-mern-backend-6g30.onrender.com/books")
       .then((res) => {
         setBooks(res.data.data);
         setFilteredBooks(res.data.data);
@@ -33,7 +41,8 @@ const Home = () => {
     const filtered = books.filter((book) => {
       return (
         (!title || book.title.toLowerCase().includes(title.toLowerCase())) &&
-        (!author || book.author?.toLowerCase().includes(author.toLowerCase())) &&
+        (!author ||
+          book.author?.toLowerCase().includes(author.toLowerCase())) &&
         (!publishYear || book.publishYear?.toString().includes(publishYear))
       );
     });
@@ -44,26 +53,48 @@ const Home = () => {
     setFilteredBooks(books);
   };
 
+  const toggleShowType = () => {
+    setShowType((prevType) => (prevType === "table" ? "card" : "table"));
+  };
+
   return (
     <div className="p-4">
       {/* Search Bar */}
       <SearchBar onSearch={handleSearch} onClear={handleClearSearch} />
 
-      <div className="flex justify-center items-center gap-x-4">
-        <button
-          className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg"
-          onClick={() => setShowType("table")}
-        >
-          Table
-        </button>
-        <button
-          className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg"
-          onClick={() => setShowType("card")}
-        >
-          Card
-        </button>
+      {/* Toggle Switch */}
+      <div className="flex justify-center items-center my-4">
+        <div className="flex items-center gap-4">
+          <span
+            className={`text-sm font-medium ${
+              showType === "table" ? "text-sky-800" : "text-gray-400"
+            }`}
+          >
+            Table
+          </span>
+          <button
+            className="bg-gray-200 rounded-full w-16 h-8 relative focus:outline-none"
+            onClick={toggleShowType}
+          >
+            <div
+              className={`absolute top-0.5 left-1 w-6 h-6 rounded-full transform transition-transform duration-300 ${
+                showType === "table"
+                  ? "translate-x-0 bg-sky-800"
+                  : "translate-x-8 bg-sky-600"
+              }`}
+            ></div>
+          </button>
+          <span
+            className={`text-sm font-medium ${
+              showType === "card" ? "text-sky-800" : "text-gray-400"
+            }`}
+          >
+            Card
+          </span>
+        </div>
       </div>
 
+      {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl my-8">Books List</h1>
         <Link to={"/books/create"}>
@@ -71,6 +102,7 @@ const Home = () => {
         </Link>
       </div>
 
+      {/* Books Display */}
       {loading ? (
         <Spinner />
       ) : showType === "table" ? (

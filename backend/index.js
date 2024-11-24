@@ -12,13 +12,15 @@ app.use(express.json());
 const PORT = process.env.PORT || 4000;
 const MONGODB_URL = process.env.MONGODB_URL;
 
-app.use(
-  cors({
-    origin: 'https://bookstore-mern-frontend-seyt.onrender.com',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
-  })
-);
+app.use(cors());
+
+// app.use(
+//   cors({
+//     origin: 'https://bookstore-mern-frontend-seyt.onrender.com',
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type'],
+//   })
+// );
 
 app.get("/", (req, res) => {
   console.log(req);

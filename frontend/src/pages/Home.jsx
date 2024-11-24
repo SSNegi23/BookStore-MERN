@@ -14,7 +14,8 @@ const Home = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("https://bookstore-mern-backend-6g30.onrender.com/books")
+      .get("http://localhost:4000/books")
+      // .get("https://bookstore-mern-backend-6g30.onrender.com/books")
       .then((res) => {
         setBooks(res.data.data);
         setLoading(false);

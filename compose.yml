@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - MONGODB_URL=${MONGODB_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./backend:/app # Sync local changes
+      - /app/node_modules # Exclude node_modules
+    command: npm run dev # Run nodemon
+    depends_on:
+      - mongodb
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app # Sync local changes
+      - /app/node_modules # Exclude node_modules
+    command: npm run dev # Run Vite in development mode
+
+  mongodb:
+    image: mongo
+    container_name: bookstore_mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example

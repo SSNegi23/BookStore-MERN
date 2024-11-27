@@ -61,7 +61,7 @@ const Home = () => {
     <div className="p-4">
       {/* Search Bar */}
       <SearchBar onSearch={handleSearch} onClear={handleClearSearch} />
-
+      
       {/* Toggle Switch */}
       <div className="flex justify-center items-center my-4">
         <div className="flex items-center gap-4">
@@ -93,7 +93,6 @@ const Home = () => {
           </span>
         </div>
       </div>
-
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl my-8">Books List</h1>
@@ -101,7 +100,6 @@ const Home = () => {
           <MdOutlineAddBox className="text-sky-800 text-4xl" />
         </Link>
       </div>
-
       {/* Books Display */}
       {loading ? (
         <Spinner />

@@ -19,7 +19,7 @@ const SearchBar = ({ onSearch, onClear }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSearchFields((prev) => ({ ...prev, [name]: value }));
+    setSearchFields((prev) => ({ ...prev, [name]: value.trim() }));
   };
 
   return (

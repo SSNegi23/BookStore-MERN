@@ -2,9 +2,25 @@ import { Book } from "../models/bookModel.js";
 
 export const getBooks = async (req, res) => {
   try {
-    const books = await Book.find({});
+    const limit = Math.max(parseInt(req.query.limit) || 10, 1);
+    const skip = Math.max(parseInt(req.query.skip) || 0, 0);
+
+    const searchFilters = {};
+    if (req.query.title) {
+      searchFilters.title = { $regex: req.query.title, $options: "i" }; // Case-insensitive search
+    }
+    if (req.query.author) {
+      searchFilters.author = { $regex: req.query.author, $options: "i" };
+    }
+    if (req.query.publishYear) {
+      searchFilters.publishYear = req.query.publishYear;
+    }
+
+    const books = await Book.find(searchFilters).skip(skip).limit(limit);
+    const totalBooks = await Book.countDocuments(searchFilters);
 
     return res.status(200).json({
+      total: totalBooks,
       count: books.length,
       data: books,
     });
@@ -13,6 +29,7 @@ export const getBooks = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
 
 export const saveBook = async (req, res) => {
   try {

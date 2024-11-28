@@ -23,8 +23,8 @@ export const loginController = async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Login successful",
-      user: { id: user._id, name: user.name, email: user.email },
+      message: "Login successfull",
+      user: { id: user._id, username: user.username, email: user.email },
       token: generateToken(user._id),
     });
   } catch (error) {
@@ -33,10 +33,10 @@ export const loginController = async (req, res) => {
 };
 
 export const registerController = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   // Validate fields
-  if (!name || !email || !password) {
+  if (!username || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -49,14 +49,14 @@ export const registerController = async (req, res) => {
 
     // Create user
     const newUser = await User.create({
-      name,
+      username,
       email,
       password,
     });
 
     res.status(201).json({
       message: "User registered successfully",
-      user: { id: newUser._id, name: newUser.name, email: newUser.email },
+      user: { id: newUser._id, username: newUser.username, email: newUser.email },
       token: generateToken(newUser._id),
     });
   } catch (error) {

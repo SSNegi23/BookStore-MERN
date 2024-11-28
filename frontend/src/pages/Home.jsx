@@ -11,8 +11,6 @@ const Home = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  // Retrieve `showType` from localStorage or default to "table"
   const [showType, setShowType] = useState(
     () => localStorage.getItem("showType") || "table"
   );
@@ -58,7 +56,7 @@ const Home = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto">
       {/* Search Bar */}
       <SearchBar onSearch={handleSearch} onClear={handleClearSearch} />
       
@@ -94,10 +92,10 @@ const Home = () => {
         </div>
       </div>
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Books List</h1>
-        <Link to={"/books/create"}>
-          <MdOutlineAddBox className="text-sky-800 text-4xl" />
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold">Books List</h1>
+        <Link to={"/books/create"} className="flex items-center gap-2 text-sky-800 text-lg hover:underline">
+          <MdOutlineAddBox className="text-3xl md:text-4xl" />
         </Link>
       </div>
       {/* Books Display */}

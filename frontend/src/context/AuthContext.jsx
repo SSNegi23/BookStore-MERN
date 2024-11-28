@@ -1,26 +1,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { clearUserData, getUserData, saveUserData } from "../utils/authStorage";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const login = () => setIsAuthenticated(true);
-    const logout = () => setIsAuthenticated(false);
+  const login = (data) => {
+    saveUserData(data);
+    setIsAuthenticated(true);
+  };
 
-    // Check if user is authenticated from localStorage when app loads
-    useEffect(() => {
-        const userData = localStorage.getItem("userData");
-        if (userData) {
-            setIsAuthenticated(true); // If user data exists in localStorage, mark as authenticated
-        }
-    }, []);
+  const logout = () => {
+    clearUserData();
+    setIsAuthenticated(false);
+  };
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, logout, login }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  // Check if user is authenticated from localStorage when app loads
+  useEffect(() => {
+    setIsLoading(true);
+    const userData = getUserData();
+    if (userData) {
+      setIsAuthenticated(true); // If user data exists in localStorage, mark as authenticated
+    }
+    setIsLoading(false);
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, logout, login }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);

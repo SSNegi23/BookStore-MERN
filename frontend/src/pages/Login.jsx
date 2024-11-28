@@ -30,8 +30,7 @@ const Login = () => {
       }`;
       const response = await axios.post(url, data, config);
       console.log("Response:", response.data);
-      localStorage.setItem("userData", JSON.stringify(response));
-      login();
+      login(response);
       reset();
       // Redirect the user back to the page they were on before
       const from = location.state?.from?.pathname || "/";

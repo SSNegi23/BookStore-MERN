@@ -1,14 +1,19 @@
+import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import CreateBooks from "./pages/CreateBooks";
-import ShowBook from "./pages/ShowBook";
-import DeleteBook from "./pages/DeleteBook";
-import EditBook from "./pages/EditBook";
-import Login from "./pages/Login";
-import Signup from "./pages/SignUp";
+import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-import Navbar from "./components/Navbar";
+import Spinner from "./components/Spinner";
+import routes from "./routes/routes";
+
+// Dynamic imports
+const Home = React.lazy(() => import("./pages/Home"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Signup = React.lazy(() => import("./pages/Signup"));
+const CreateBooks = React.lazy(() => import("./pages/CreateBooks"));
+const ShowBook = React.lazy(() => import("./pages/ShowBook"));
+const EditBook = React.lazy(() => import("./pages/EditBook"));
+const DeleteBook = React.lazy(() => import("./pages/DeleteBook"));
 
 const App = () => {
   return (
@@ -16,46 +21,48 @@ const App = () => {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <div className="flex-grow">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/" element={<Home />} />
-            
-            {/* Protected Routes */}
-            <Route
-              path="/books/create"
-              element={
-                <ProtectedRoute>
-                  <CreateBooks />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/books/details/:id"
-              element={
-                <ProtectedRoute>
-                  <ShowBook />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/books/edit/:id"
-              element={
-                <ProtectedRoute>
-                  <EditBook />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/books/delete/:id"
-              element={
-                <ProtectedRoute>
-                  <DeleteBook />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path={routes.login} element={<Login />} />
+              <Route path={routes.signup} element={<Signup />} />
+              <Route path={routes.home} element={<Home />} />
+
+              {/* Protected Routes */}
+              <Route
+                path={routes.createBook}
+                element={
+                  <ProtectedRoute>
+                    <CreateBooks />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={routes.showBook}
+                element={
+                  <ProtectedRoute>
+                    <ShowBook />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={routes.editBook}
+                element={
+                  <ProtectedRoute>
+                    <EditBook />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={routes.deleteBook}
+                element={
+                  <ProtectedRoute>
+                    <DeleteBook />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Suspense>
         </div>
       </div>
     </AuthProvider>

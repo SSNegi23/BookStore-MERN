@@ -10,12 +10,6 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  
-  const handleLogout = () => {
-    localStorage.removeItem("userData");
-    logout();
-    toggleMenu();
-  };
 
   return (
     <nav className="bg-sky-600 shadow-lg">
@@ -45,7 +39,7 @@ const Navbar = () => {
           <>
             <div className="hidden md:flex space-x-6">
               <Link
-                onClick={handleLogout}
+                onClick={logout}
                 className="text-white text-lg font-medium hover:underline"
               >
                 Logout
@@ -117,7 +111,10 @@ const Navbar = () => {
                   <Link
                     to="/"
                     className="block text-white text-lg font-medium hover:underline"
-                    onClick={handleLogout}
+                    onClick={() => {
+                      logout();
+                      toggleMenu();
+                    }}
                   >
                     Logout
                   </Link>

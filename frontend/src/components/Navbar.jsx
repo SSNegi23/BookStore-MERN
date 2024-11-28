@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+  
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    logout();
+    toggleMenu();
   };
 
   return (
@@ -33,20 +41,35 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6">
-          <Link
-            to="/login"
-            className="text-white text-lg font-medium hover:underline"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="text-white text-lg font-medium hover:underline"
-          >
-            Signup
-          </Link>
-        </div>
+        {isAuthenticated ? (
+          <>
+            <div className="hidden md:flex space-x-6">
+              <Link
+                onClick={handleLogout}
+                className="text-white text-lg font-medium hover:underline"
+              >
+                Logout
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="hidden md:flex space-x-6">
+              <Link
+                to="/login"
+                className="text-white text-lg font-medium hover:underline"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="text-white text-lg font-medium hover:underline"
+              >
+                Signup
+              </Link>
+            </div>
+          </>
+        )}
 
         {/* Burger Menu for Mobile */}
         <button
@@ -88,24 +111,40 @@ const Navbar = () => {
                 Contact
               </Link>
             </li>
-            <li>
-              <Link
-                to="/login"
-                className="block text-white text-lg font-medium hover:underline"
-                onClick={toggleMenu}
-              >
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/signup"
-                className="block text-white text-lg font-medium hover:underline"
-                onClick={toggleMenu}
-              >
-                Signup
-              </Link>
-            </li>
+            {isAuthenticated ? (
+              <>
+                <li>
+                  <Link
+                    to="/"
+                    className="block text-white text-lg font-medium hover:underline"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    to="/login"
+                    className="block text-white text-lg font-medium hover:underline"
+                    onClick={toggleMenu}
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/signup"
+                    className="block text-white text-lg font-medium hover:underline"
+                    onClick={toggleMenu}
+                  >
+                    Signup
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       )}
